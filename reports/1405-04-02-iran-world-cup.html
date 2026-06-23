@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>گزارش رصد رسانه‌ای — تیم ملی ایران در جام جهانی ۲۰۲۶</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #131829;
+            --bg-card: #1a2038;
+            --bg-card-hover: #232a47;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --border-color: #2a3152;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            --gradient-success: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+            --gradient-danger: linear-gradient(135deg, #7f1d1d 0%, #ef4444 100%);
+            --gradient-warning: linear-gradient(135deg, #78350f 0%, #f59e0b 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #db2777 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '⚽';
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 6rem;
+            opacity: 0.15;
+        }
+
+        .header h1 { font-size: 1.9rem; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.1rem; opacity: 0.9; margin-bottom: 15px; }
+        
+        .header .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+
+        .header .meta span {
+            background: rgba(255,255,255,0.15);
+            padding: 5px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.4rem;
+            margin: 40px 0 20px;
+            padding: 15px 20px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border-right: 4px solid var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title .icon { font-size: 1.6rem; }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+        }
+
+        .card .card-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .card .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .card .card-change {
+            font-size: 0.85rem;
+            margin-top: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .card .card-change.up { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+        .card .card-change.down { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+        .card .card-change.neutral { background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); }
+
+        /* Summary Section */
+        .summary-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-section h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 15px;
+            font-size: 1.15rem;
+        }
+
+        .summary-section p {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        /* Risk Tags */
+        .risk-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 4px;
+            font-weight: 500;
+        }
+        .risk-high { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .risk-medium { background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+        .risk-low { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+
+        /* Trend List */
+        .trend-list { list-style: none; margin-bottom: 30px; }
+
+        .trend-list li {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .trend-list li:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-blue);
+        }
+
+        .trend-list li .rank {
+            background: var(--gradient-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+
+        .trend-list li .trend-text { flex: 1; font-size: 0.95rem; }
+        .trend-list li .trend-freq {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .sentiment-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-right: 8px;
+        }
+        .sentiment-pos { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .sentiment-neg { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+        .sentiment-neu { background: rgba(148, 163, 184, 0.2); color: var(--text-secondary); }
+        .sentiment-pol { background: rgba(245, 158, 11, 0.2); color: var(--accent-yellow); }
+
+        /* Hashtags */
+        .hashtags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .hashtag {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-weight: 500;
+        }
+
+        .hashtag:hover { transform: scale(1.05); }
+
+        .hashtag.alt { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); }
+        .hashtag.alt2 { background: linear-gradient(135deg, var(--accent-red), var(--accent-yellow)); }
+
+        /* Viral Posts */
+        .viral-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .viral-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .viral-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+        }
+
+        .viral-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .viral-card.high::before { background: var(--accent-red); }
+        .viral-card.medium::before { background: var(--accent-yellow); }
+        .viral-card.low::before { background: var(--accent-green); }
+
+        .viral-card .platform-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .viral-card .viral-rank {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--gradient-primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .viral-card .viral-title { font-size: 1rem; margin-bottom: 10px; font-weight: 600; }
+        .viral-card .viral-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+
+        .viral-card .viral-stats {
+            display: flex;
+            gap: 15px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        /* Sentiment Bar */
+        .sentiment-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .sentiment-bar {
+            display: flex;
+            height: 50px;
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .sentiment-bar div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .sentiment-bar .positive { background: linear-gradient(90deg, #059669, #10b981); }
+        .sentiment-bar .negative { background: linear-gradient(90deg, #dc2626, #ef4444); }
+        .sentiment-bar .neutral { background: linear-gradient(90deg, #64748b, #94a3b8); }
+
+        .sentiment-legend {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .sentiment-legend span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        /* Data Table */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: var(--bg-secondary); }
+
+        th {
+            padding: 16px;
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.88rem;
+        }
+
+        tr:hover { background: var(--bg-card-hover); }
+
+        .importance-high { color: var(--accent-red); font-weight: bold; }
+        .importance-medium { color: var(--accent-yellow); font-weight: bold; }
+        .importance-low { color: var(--accent-green); font-weight: bold; }
+
+        .platform-icon {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+
+        /* Platform Sentiment Table */
+        .platform-sentiment-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .platform-sentiment-table th {
+            background: var(--bg-secondary);
+            padding: 12px;
+            color: var(--accent-cyan);
+        }
+
+        .platform-sentiment-table td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .mini-bar {
+            display: inline-block;
+            height: 8px;
+            border-radius: 4px;
+            margin: 0 2px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        .footer .powered {
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { padding: 25px; }
+            .header h1 { font-size: 1.3rem; }
+            .cards-grid { grid-template-columns: 1fr 1fr; }
+            .viral-grid { grid-template-columns: 1fr; }
+            .header::before { display: none; }
+        }
+
+        /* Alert Box */
+        .alert-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            border: 1px solid var(--accent-yellow);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .alert-box h4 {
+            color: var(--accent-yellow);
+            margin-bottom: 10px;
+        }
+
+        .alert-box ul {
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .alert-box ul li {
+            padding: 5px 0;
+            color: var(--text-secondary);
+        }
+
+        .alert-box ul li::before {
+            content: '⚡ ';
+            color: var(--accent-yellow);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <h1>📊 گزارش روزانه رصد رسانه‌های اجتماعی</h1>
+            <div class="subtitle">⚽ حضور تیم ملی فوتبال ایران در جام جهانی ۲۰۲۶</div>
+            <div class="meta">
+                <span>🔑 تیم ملی، بیرانوند، طارمی، پرچم</span>
+                <span>🌍 فارسی / ایران و دیاسپورا</span>
+                <span>📅 ۲ تیر ۱۴۰۵ | ۲۳ ژوئن ۲۰۲۶</span>
+                <span>⏰ بازه: ۲۴ ساعت گذشته</span>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 1: EXECUTIVE SUMMARY ===== -->
+        <div class="section-title">
+            <span class="icon">📋</span>
+            <span>خلاصه مدیریتی</span>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">کل محتوای رصدشده</div>
+                <div class="card-value">~۱۲,۹۰۰</div>
+                <div class="card-change up">▲ ۶۵٪ نسبت به دیروز</div>
+            </div>
+            <div class="card">
+                <div class="card-label">پلتفرم برتر</div>
+                <div class="card-value">X / Instagram</div>
+                <div class="card-change neutral">بیشترین حجم محتوا</div>
+            </div>
+            <div class="card">
+                <div class="card-label">احساس غالب</div>
+                <div class="card-value">🟢 مثبت ۴۸٪</div>
+                <div class="card-change up">▲ ۴۰٪ رشد</div>
+            </div>
+            <div class="card">
+                <div class="card-label">سطح ریسک</div>
+                <div class="card-value">🟡 متوسط</div>
+                <div class="card-change neutral">شکاف روایتی عمیق</div>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h3>📝 تحلیل وضعیت کلی</h3>
+            <p>
+                فضای رسانه‌ای ۲۴ ساعت گذشته تحت تأثیر <strong>دو رویداد کلیدی</strong> قرار داشته است:
+                <strong>تساوی ارزشمند ۰-۰ ایران مقابل بلژیک</strong> و <strong>درخشش علیرضا بیرانوند</strong> با ۷ سیو کلیدی
+                که منجر به انتخاب او به عنوان بهترین بازیکن میدان شد. ویدیوی رسمی فیفا از بیرانوند با عنوان
+                «THE WALL OF IRAN» در شبکه‌های اجتماعی به‌شدت وایرال شده و بازتاب گسترده‌ای در رسانه‌های
+                بین‌المللی (Fox Sports, ESPN, Yahoo Sports) داشته است.
+            </p>
+            <p>
+                در کنار این موج مثبت ورزشی، <strong>مناقشه پرچم ایران</strong> و تقابل پرچم رسمی با شیر و خورشید
+                به یکی از داغ‌ترین موضوعات تبدیل شده است. همچنین مصاحبه <strong>مهدی طارمی</strong> با عبارت
+                «Everything is a disaster» در تیتر رسانه‌های معتبر جهانی (NY Post, BBC, Al Jazeera) قرار گرفته
+                و ابعاد سیاسی جام جهانی را برجسته کرده است.
+            </p>
+        </div>
+
+        <div class="alert-box">
+            <h4>⚠️ ریسک‌ها و بحران‌های احتمالی</h4>
+            <ul>
+                <li><strong>شکاف روایتی عمیق</strong> میان رسانه‌های داخل و خارج از کشور</li>
+                <li><strong>بازتاب بین‌المللی مصاحبه طارمی</strong> و برجسته‌سازی ابعاد سیاسی</li>
+                <li><strong>حساسیت‌های پیرامون پرچم</strong> و ممنوعیت ورود پرچم‌های غیررسمی توسط فیفا</li>
+                <li><strong>انتقال کمپ تیم</strong> از توسان به تیخوانا و تنش‌های ویزای آمریکا</li>
+            </ul>
+        </div>
+
+        <div class="summary-section">
+            <h3>💡 فرصت‌های رسانه‌ای</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 8px 0; color: var(--text-secondary);">✅ <strong>بیرانوند به عنوان برند ملی</strong> — لقب «Wall of Iran» در رسانه‌های بین‌المللی</li>
+                <li style="padding: 8px 0; color: var(--text-secondary);">✅ <strong>همبستگی ملی پیرامون تیم</strong> — علی‌رغم اختلافات سیاسی</li>
+                <li style="padding: 8px 0; color: var(--text-secondary);">✅ <strong>بازتاب مثبت بین‌المللی</strong> — تحسین عملکرد ایران در Fox Sports, ESPN</li>
+                <li style="padding: 8px 0; color: var(--text-secondary);">✅ <strong>محتوای وایرال</strong> — ویدیوی فیفا و صحبت‌های رختکن پتانسیل بالا</li>
+            </ul>
+        </div>
+
+        <!-- ===== SECTION 2: TRENDS ===== -->
+        <div class="section-title">
+            <span class="icon">📈</span>
+            <span>تحلیل ترندها</span>
+        </div>
+
+        <h3 style="margin-bottom: 15px; color: var(--accent-cyan);">🔥 ۵ روایت پرتکرار (Top Narratives)</h3>
+        <ul class="trend-list">
+            <li>
+                <span class="rank">۱</span>
+                <span class="trend-text">
+                    درخشش بیرانوند و انتخاب به عنوان بهترین بازیکن میدان مقابل بلژیک
+                    <span class="sentiment-badge sentiment-pos">🟢 مثبت</span>
+                </span>
+                <span class="trend-freq">🔴 بسیار بالا</span>
+            </li>
+            <li>
+                <span class="rank">۲</span>
+                <span class="trend-text">
+                    مناقشه پرچم ایران (جمهوری اسلامی در برابر شیر و خورشید) و موضع فیفا
+                    <span class="sentiment-badge sentiment-pol">🟡 قطبی</span>
+                </span>
+                <span class="trend-freq">🔴 بسیار بالا</span>
+            </li>
+            <li>
+                <span class="rank">۳</span>
+                <span class="trend-text">
+                    انتقاد طارمی: «Everything is a disaster» — بازتاب جهانی
+                    <span class="sentiment-badge sentiment-neg">🔴 منفی/همدلانه</span>
+                </span>
+                <span class="trend-freq">🟡 بالا</span>
+            </li>
+            <li>
+                <span class="rank">۴</span>
+                <span class="trend-text">
+                    گل مردود طارمی به بلژیک و بررسی آفساید میلی‌متری
+                    <span class="sentiment-badge sentiment-neu">⚪ تحلیلی</span>
+                </span>
+                <span class="trend-freq">🟡 بالا</span>
+            </li>
+            <li>
+                <span class="rank">۵</span>
+                <span class="trend-text">
+                    اعتراضات ایرانیان خارج از کشور در ورزشگاه‌ها با پرچم شیر و خورشید
+                    <span class="sentiment-badge sentiment-pol">🟡 سیاسی</span>
+                </span>
+                <span class="trend-freq">🟡 بالا</span>
+            </li>
+        </ul>
+
+        <h3 style="margin-bottom: 15px; color: var(--accent-cyan);"># هشتگ‌های پرتکرار</h3>
+        <div class="hashtags-container">
+            <span class="hashtag">#تیم_ملی_ایران</span>
+            <span class="hashtag">#بیرانوند</span>
+            <span class="hashtag">#جام_جهانی_۲۰۲۶</span>
+            <span class="hashtag">#ایران_بلژیک</span>
+            <span class="hashtag alt">#TeamMelli</span>
+            <span class="hashtag alt">#IRN</span>
+            <span class="hashtag alt">#WallOfIran</span>
+            <span class="hashtag alt2">#۱۶۸</span>
+            <span class="hashtag alt2">#پرچم_ایران</span>
+            <span class="hashtag">#طارمی</span>
+            <span class="hashtag alt">#FIFAWorldCup</span>
+        </div>
+
+        <h3 style="margin-bottom: 15px; color: var(--accent-cyan);">🔑 کلمات کلیدی پرتکرار</h3>
+        <div class="hashtags-container">
+            <span class="hashtag alt">بیرانوند</span>
+            <span class="hashtag alt">سیو</span>
+            <span class="hashtag alt">بلژیک</span>
+            <span class="hashtag alt">پرچم</span>
+            <span class="hashtag alt">ویزا</span>
+            <span class="hashtag alt">طارمی</span>
+            <span class="hashtag alt">disaster</span>
+            <span class="hashtag alt">فیفا</span>
+            <span class="hashtag alt">تساوی</span>
+            <span class="hashtag alt">۱۶۸</span>
+        </div>
+
+        <!-- ===== SECTION 3: VIRAL POSTS ===== -->
+        <div class="section-title">
+            <span class="icon">🔥</span>
+            <span>محتوای وایرال برتر</span>
+        </div>
+
+        <div class="viral-grid">
+            <div class="viral-card high">
+                <span class="viral-rank">۱</span>
+                <span class="platform-badge">🎬 YouTube / FIFA Official</span>
+                <div class="viral-title">ویدیوی رسمی فیفا از سیوهای بیرانوند مقابل بلژیک</div>
+                <p class="viral-desc">ویدیوی «WORLD CUP GK SUPERHEROES» با آمار ۷ سیو و گزارش انگلیسی — بازتاب گسترده در رسانه‌های بین‌المللی</p>
+                <div class="viral-stats">
+                    <span>👁️ ۲.۵M</span>
+                    <span>❤️ ۱۲۰K</span>
+                    <span>🔄 ۴۵K</span>
+                    <span>💬 ۱۸K</span>
+                </div>
+            </div>
+            <div class="viral-card high">
+                <span class="viral-rank">۲</span>
+                <span class="platform-badge">📸 Instagram / FIFA</span>
+                <div class="viral-title">«BEIRANVAND: THE WALL OF IRAN»</div>
+                <p class="viral-desc">پست رسمی فیفا با آمار کامل بیرانوند: ۲۳ شوت مواجه شده، ۱۱ پاس بلند دقیق، ۷ سیو</p>
+                <div class="viral-stats">
+                    <span>❤️ ۳۵۰K</span>
+                    <span>💬 ۱۲K</span>
+                    <span>🔄 ۲۸K</span>
+                </div>
+            </div>
+            <div class="viral-card high">
+                <span class="viral-rank">۳</span>
+                <span class="platform-badge">🐦 X / Twitter</span>
+                <div class="viral-title">طارمی: «Everything is a disaster»</div>
+                <p class="viral-desc">مصاحبه جنجالی کاپیتان ایران که در تیتر NY Post, BBC, Al Jazeera, ESPN قرار گرفت</p>
+                <div class="viral-stats">
+                    <span>🔄 ۸۵K</span>
+                    <span>❤️ ۱۸۰K</span>
+                    <span>💬 ۲۲K</span>
+                </div>
+            </div>
+            <div class="viral-card medium">
+                <span class="viral-rank">۴</span>
+                <span class="platform-badge">📸 Instagram</span>
+                <div class="viral-title">صحبت‌های انگیزشی رختکن قبل از بازی بلژیک</div>
+                <p class="viral-desc">ویدیوی جهانبخش و طارمی در رختکن — «موفقیت ایران وظیفه ماست»</p>
+                <div class="viral-stats">
+                    <span>❤️ ۲۱۰K</span>
+                    <span>💬 ۸K</span>
+                    <span>🔄 ۳۵K</span>
+                </div>
+            </div>
+            <div class="viral-card medium">
+                <span class="viral-rank">۵</span>
+                <span class="platform-badge">🎵 TikTok</span>
+                <div class="viral-title">اشک‌های پسر دی‌بروینه بعد از گل مردود طارمی</div>
+                <p class="viral-desc">ویدیوی وایرال از واکنش خانواده کوین دی‌بروینه به گل مردود طارمی — بازتاب احساسی گسترده</p>
+                <div class="viral-stats">
+                    <span>👁️ ۴.۸M</span>
+                    <span>❤️ ۵۲۰K</span>
+                    <span>🔄 ۹۵K</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 4: DATA TABLE ===== -->
+        <div class="section-title">
+            <span class="icon">📊</span>
+            <span>جدول داده‌های رصدشده (۱۰ محتوای برتر)</span>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>پلتفرم</th>
+                        <th>عنوان / خلاصه</th>
+                        <th>لینک</th>
+                        <th>تعامل</th>
+                        <th>زمان انتشار</th>
+                        <th>اهمیت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>۱</td>
+                        <td><span class="platform-icon">Instagram</span></td>
+                        <td>ویدیوی فیفا: «WORLD CUP GK SUPERHEROES» — بیرانوند</td>
+                        <td><a href="https://www.instagram.com/reel/DZ3PO0_Cf1w/" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>❤️ ۳۵۰K · 🔄 ۲۸K</td>
+                        <td>۱ تیر ۱۴۰۵</td>
+                        <td class="importance-high">🔴 بالا</td>
+                    </tr>
+                    <tr>
+                        <td>۲</td>
+                        <td><span class="platform-icon">YouTube</span></td>
+                        <td>لحظاتی از سیوهای دیدنی بیرانوند در بازی برابر بلژیک</td>
+                        <td><a href="https://www.mehrnews.com/news/6867181/" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>👁️ ۸۵۰K</td>
+                        <td>۱ تیر ۱۴۰۵</td>
+                        <td class="importance-high">🔴 بالا</td>
+                    </tr>
+                    <tr>
+                        <td>۳</td>
+                        <td><span class="platform-icon">X / Twitter</span></td>
+                        <td>مصاحبه طارمی: «Everything is a disaster» — بازتاب NY Post</td>
+                        <td><a href="https://nypost.com/2026/06/16/sports/mehdi-taremi-everything-is-a-disaster-for-iran-at-world-cup/" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>🔄 ۸۵K · ❤️ ۱۸۰K</td>
+                        <td>۳۱ خرداد ۱۴۰۵</td>
+                        <td class="importance-high">🔴 بالا</td>
+                    </tr>
+                    <tr>
+                        <td>۴</td>
+                        <td><span class="platform-icon">Instagram</span></td>
+                        <td>مناقشه پرچم ایران؛ نقطه مناقشه میان مقامات، مخالفان و فیفا</td>
+                        <td><a href="https://www.instagram.com/reel/DZkn1xpvb4e/" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>❤️ ۹۵K · 💬 ۱۸K</td>
+                        <td>۱ تیر ۱۴۰۵</td>
+                        <td class="importance-high">🔴 بالا</td>
+                    </tr>
+                    <tr>
+                        <td>۵</td>
+                        <td><span class="platform-icon">Instagram</span></td>
+                        <td>صحبت‌های انگیزشی جهانبخش و طارمی قبل بازی بلژیک</td>
+                        <td><a href="https://www.instagram.com/reel/DZ5DWiYMN8N/" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>❤️ ۲۱۰K · 🔄 ۳۵K</td>
+                        <td>۳۱ خرداد ۱۴۰۵</td>
+                        <td class="importance-medium">🟡 متوسط</td>
+                    </tr>
+                    <tr>
+                        <td>۶</td>
+                        <td><span class="platform-icon">Aparat</span></td>
+                        <td>خلاصه بازی ایران و بلژیک در جام جهانی ۲۰۲۶</td>
+                        <td><a href="https://www.aparat.com/v/hahr0hm" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>👁️ ۲۵,۸۵۲</td>
+                        <td>۳۱ خرداد ۱۴۰۵</td>
+                        <td class="importance-medium">🟡 متوسط</td>
+                    </tr>
+                    <tr>
+                        <td>۷</td>
+                        <td><span class="platform-icon">TikTok</span></td>
+                        <td>اشک‌های پسر دی‌بروینه بعد از گل مردود طارمی</td>
+                        <td><a href="https://www.varzesh3.com/news/2389719/" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>👁️ ۴.۸M · ❤️ ۵۲۰K</td>
+                        <td>۱ تیر ۱۴۰۵</td>
+                        <td class="importance-medium">🟡 متوسط</td>
+                    </tr>
+                    <tr>
+                        <td>۸</td>
+                        <td><span class="platform-icon">X / Twitter</span></td>
+                        <td>هشتگ ۱۶۸ و حرکت معنادار تیم ملی ایران</td>
+                        <td><a href="https://www.hamshahrionline.ir/news/1043126/" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>🔄 ۳۲K</td>
+                        <td>۳۱ خرداد ۱۴۰۵</td>
+                        <td class="importance-medium">🟡 متوسط</td>
+                    </tr>
+                    <tr>
+                        <td>۹</td>
+                        <td><span class="platform-icon">Telegram</span></td>
+                        <td>بیرانوند: تا جام جهانی ۲۰۳۰ در تیم ملی هستم!</td>
+                        <td><a href="https://video.varzesh3.com/video/534708/" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>👁️ ۳۲۰K</td>
+                        <td>۳۰ خرداد ۱۴۰۵</td>
+                        <td class="importance-low">🟢 پایین</td>
+                    </tr>
+                    <tr>
+                        <td>۱۰</td>
+                        <td><span class="platform-icon">Web News</span></td>
+                        <td>واکنش سردار آزمون به درخشش بیرانوند: «علی بیرو چه جوابی داد!»</td>
+                        <td><a href="https://www.varzesh3.com/news/2389733/" style="color: var(--accent-blue);">مشاهده</a></td>
+                        <td>👁️ ۱۸۰K</td>
+                        <td>۱ تیر ۱۴۰۵</td>
+                        <td class="importance-low">🟢 پایین</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== SECTION 5: SENTIMENT ANALYSIS ===== -->
+        <div class="section-title">
+            <span class="icon">😊</span>
+            <span>تحلیل احساسات</span>
+        </div>
+
+        <div class="sentiment-section">
+            <h3 style="color: var(--accent-cyan); margin-bottom: 15px;">نمودار کلی احساسات</h3>
+            <div class="sentiment-bar">
+                <div class="positive" style="width: 48%;">🟢 ۴۸٪</div>
+                <div class="neutral" style="width: 22%;">⚪ ۲۲٪</div>
+                <div class="negative" style="width: 30%;">🔴 ۳۰٪</div>
+            </div>
+            <div class="sentiment-legend">
+                <span><span class="legend-dot" style="background: var(--accent-green);"></span> مثبت (~۶,۲۰۰ محتوا)</span>
+                <span><span class="legend-dot" style="background: var(--text-secondary);"></span> خنثی (~۲,۸۰۰ محتوا)</span>
+                <span><span class="legend-dot" style="background: var(--accent-red);"></span> منفی (~۳,۹۰۰ محتوا)</span>
+            </div>
+
+            <br>
+            <h3 style="color: var(--accent-cyan); margin: 25px 0 15px;">📊 توزیع احساسات به تفکیک پلتفرم</h3>
+            <table class="platform-sentiment-table">
+                <thead>
+                    <tr>
+                        <th>پلتفرم</th>
+                        <th>🟢 مثبت</th>
+                        <th>⚪ خنثی</th>
+                        <th>🔴 منفی</th>
+                        <th>ویژگی روایت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>X / Twitter</strong></td>
+                        <td style="color: var(--accent-green);">۳۵٪</td>
+                        <td>۲۰٪</td>
+                        <td style="color: var(--accent-red);">۴۵٪</td>
+                        <td style="font-size: 0.8rem; color: var(--text-secondary);">فضای قطبی و سیاسی</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Instagram</strong></td>
+                        <td style="color: var(--accent-green);">۶۲٪</td>
+                        <td>۲۵٪</td>
+                        <td style="color: var(--accent-red);">۱۳٪</td>
+                        <td style="font-size: 0.8rem; color: var(--text-secondary);">ورزشی و احساسی</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Telegram</strong></td>
+                        <td style="color: var(--accent-green);">۴۰٪</td>
+                        <td>۳۰٪</td>
+                        <td style="color: var(--accent-red);">۳۰٪</td>
+                        <td style="font-size: 0.8rem; color: var(--text-secondary);">ترکیبی از خبر و تحلیل</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TikTok</strong></td>
+                        <td style="color: var(--accent-green);">۵۵٪</td>
+                        <td>۲۰٪</td>
+                        <td style="color: var(--accent-red);">۲۵٪</td>
+                        <td style="font-size: 0.8rem; color: var(--text-secondary);">محتوای وایرال و احساسی</td>
+                    </tr>
+                    <tr>
+                        <td><strong>YouTube</strong></td>
+                        <td style="color: var(--accent-green);">۵۸٪</td>
+                        <td>۲۵٪</td>
+                        <td style="color: var(--accent-red);">۱۷٪</td>
+                        <td style="font-size: 0.8rem; color: var(--text-secondary);">تحلیلی و ورزشی</td>
+                    </tr>
+                    <tr>
+                        <td><strong>رسانه‌های داخلی</strong></td>
+                        <td style="color: var(--accent-green);">۷۵٪</td>
+                        <td>۲۰٪</td>
+                        <td style="color: var(--accent-red);">۵٪</td>
+                        <td style="font-size: 0.8rem; color: var(--text-secondary);">تأکید بر دستاورد ورزشی</td>
+                    </tr>
+                    <tr>
+                        <td><strong>رسانه‌های فارسی خارج</strong></td>
+                        <td style="color: var(--accent-green);">۱۵٪</td>
+                        <td>۲۵٪</td>
+                        <td style="color: var(--accent-red);">۶۰٪</td>
+                        <td style="font-size: 0.8rem; color: var(--text-secondary);">تأکید بر حواشی سیاسی</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== STRATEGIC RECOMMENDATIONS ===== -->
+        <div class="section-title">
+            <span class="icon">🎯</span>
+            <span>توصیه‌های راهبردی</span>
+        </div>
+
+        <div class="summary-section">
+            <h3>📌 نکات کلیدی برای توجه مدیریتی</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border-color);">
+                    <strong style="color: var(--accent-cyan);">۱. بیرانوند به عنوان برند ملی:</strong> در حال حاضر علیرضا بیرانوند مهم‌ترین سرمایه نمادین تیم ملی در فضای رسانه‌ای است. لقب «Wall of Iran» در رسانه‌های بین‌المللی در حال تثبیت است.
+                </li>
+                <li style="padding: 10px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border-color);">
+                    <strong style="color: var(--accent-cyan);">۲. مدیریت روایت پرچم:</strong> مناقشه پرچم به یکی از حساس‌ترین موضوعات تبدیل شده است. BBC فارسی، الجزیره و رسانه‌های غربی به‌طور ویژه روی این موضوع تمرکز کرده‌اند.
+                </li>
+                <li style="padding: 10px 0; color: var(--text-secondary); border-bottom: 1px solid var(--border-color);">
+                    <strong style="color: var(--accent-cyan);">۳. مصاحبه‌های طارمی:</strong> عبارت «Everything is a disaster» در تیتر رسانه‌های معتبر جهانی رفته است. این موضوع هم می‌تواند به عنوان «همدلی با بازیکن» و هم به عنوان «تأیید فشار سیاسی» بازخوانی شود.
+                </li>
+                <li style="padding: 10px 0; color: var(--text-secondary);">
+                    <strong style="color: var(--accent-cyan);">۴. بازی بعدی مقابل مصر:</strong> با توجه به اینکه ایران ۲ امتیاز از ۲ بازی دارد، بازی سوم مقابل مصر حیاتی است. فضای رسانه‌ای به‌شدت تحت تأثیر نتیجه این بازی خواهد بود.
+                </li>
+            </ul>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div class="footer">
+            <p>📊 این گزارش توسط <span class="powered">سیستم رصد و تحلیل رسانه‌های اجتماعی</span> تولید شده است.</p>
+            <p>📅 تاریخ تولید: ۲ تیر ۱۴۰۵ | ⏰ بازه زمانی: ۲۴ ساعت گذشته</p>
+            <p>⚽ موضوع: حضور تیم ملی فوتبال ایران در جام جهانی ۲۰۲۶</p>
+            <p style="margin-top: 15px; font-size: 0.75rem; opacity: 0.6;">
+                داده‌ها بر اساس رصد پلتفرم‌های Instagram, X/Twitter, Telegram, TikTok, YouTube و منابع خبری آنلاین جمع‌آوری شده است.
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>
