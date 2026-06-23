@@ -1,0 +1,29 @@
+{
+  "reports": [
+    {
+      "id": "rpt-001",
+      "title": "حضور تیم ملی ایران در جام جهانی ۲۰۲۶ — گزارش روز ۵",
+      "summary": "تحلیل کامل بازتاب رسانه‌ای بازی ایران و بلژیک، درخشش بیرانوند، مناقشه پرچم و مصاحبه جنجالی طارمی در رسانه‌های داخلی و بین‌المللی.",
+      "category": "ورزش",
+      "category_icon": "⚽",
+      "date": "۲ تیر ۱۴۰۵",
+      "date_gregorian": "2026-06-23",
+      "keywords": ["تیم ملی", "بیرانوند", "جام جهانی", "طارمی", "پرچم"],
+      "hashtags": ["#تیم_ملی_ایران", "#بیرانوند", "#جام_جهانی_۲۰۲۶"],
+      "platforms": ["Instagram", "X", "YouTube", "TikTok", "Telegram"],
+      "file": "reports/1405-04-02-iran-world-cup.html",
+      "views": 0,
+      "featured": true,
+      "sentiment": {
+        "positive": 48,
+        "neutral": 22,
+        "negative": 30
+      },
+      "total_content": 12900
+    }
+  ],
+  "metadata": {
+    "last_updated": "2026-06-23T14:30:00Z",
+    "version": "1.0"
+  }
+}

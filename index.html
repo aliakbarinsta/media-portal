@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه هوشمند رصد و تحلیل رسانه</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0B1220;
+            --bg-secondary: #111827;
+            --bg-tertiary: #1a2332;
+            --bg-card: #151d2e;
+            --bg-card-hover: #1d2840;
+            
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            
+            --accent-blue: #3B82F6;
+            --accent-blue-light: #60A5FA;
+            --accent-teal: #14B8A6;
+            --accent-teal-light: #2DD4BF;
+            --accent-purple: #8B5CF6;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --accent-yellow: #F59E0B;
+            
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(59, 130, 246, 0.4);
+            
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
+            
+            --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #14B8A6 100%);
+            --gradient-hero: linear-gradient(135deg, #0B1220 0%, #1e3a8a 50%, #0B1220 100%);
+            --gradient-card: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(20, 184, 166, 0.05) 100%);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(20, 184, 166, 0.06) 0%, transparent 40%);
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--bg-tertiary); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+        /* Navigation */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            background: rgba(11, 18, 32, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 0 40px;
+        }
+
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .nav-brand-text .main { color: var(--text-primary); font-size: 1rem; }
+        .nav-brand-text .sub { color: var(--accent-teal); font-size: 0.7rem; font-weight: 400; letter-spacing: 1px; }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--accent-green);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        }
+
+        .container { max-width: 1600px; margin: 0 auto; padding: 0 40px; }
+
+        /* Hero */
+        .hero {
+            background: var(--gradient-hero);
+            padding: 80px 0 60px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(20, 184, 166, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--accent-blue-light);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #F8FAFC 0%, #60A5FA 50%, #2DD4BF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 50px;
+        }
+
+        .hero-stat {
+            background: rgba(21, 29, 46, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .hero-stat:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            background: rgba(29, 40, 64, 0.8);
+        }
+
+        .hero-stat:hover::before { opacity: 1; }
+
+        .hero-stat-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            background: var(--gradient-card);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .hero-stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+
+        .hero-stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Section */
+        .section { padding: 60px 0; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title .icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        /* Search */
+        .search-section { padding: 60px 0 40px; }
+
+        .search-wrapper { max-width: 900px; margin: 0 auto; }
+
+        .search-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), var(--shadow-lg);
+        }
+
+        .search-icon { padding: 0 16px; font-size: 1.3rem; color: var(--text-secondary); }
+
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 14px 0;
+        }
+
+        .search-input::placeholder { color: var(--text-muted); }
+
+        .search-btn {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .search-btn:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Categories */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .category-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s;
+        }
+
+        .category-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+        }
+
+        .category-card:hover::before { transform: scaleX(1); }
+
+        .category-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-card);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .category-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .category-count {
+            color: var(--accent-teal);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Featured Reports */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .featured-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .featured-header {
+            height: 140px;
+            background: var(--gradient-primary);
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .featured-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .featured-category-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .featured-date {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        .featured-emoji {
+            font-size: 3.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-body {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .featured-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .featured-summary {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .featured-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .keyword-tag {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .featured-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .featured-platforms { display: flex; gap: 6px; }
+
+        .platform-badge {
+            width: 28px;
+            height: 28px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .view-report-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-report-btn:hover {
+            transform: translateX(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .empty-state-text {
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            margin-top: 60px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .top-nav { padding: 0 20px; }
+            .hero h1 { font-size: 2rem; }
+            .hero-stats { grid-template-columns: repeat(2, 1fr); }
+            .featured-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="nav-logo">📡</div>
+                <div class="nav-brand-text">
+                    <span class="main">سامانه هوشمند رصد رسانه</span>
+                    <span class="sub">MEDIA INTELLIGENCE PORTAL</span>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span>فعال</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="status-dot"></span>
+                    <span>سامانه رصد رسانه‌ای</span>
+                </div>
+                <h1>سامانه هوشمند رصد و تحلیل رسانه</h1>
+                <p>مرجع گزارش‌های رصدی، تحلیل روندها، روایت‌ها و تحولات فضای مجازی</p>
+                
+                <div class="hero-stats" id="heroStats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">📄</div>
+                        <div class="hero-stat-value" id="totalReports">—</div>
+                        <div class="hero-stat-label">گزارش منتشرشده</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">🔑</div>
+                        <div class="hero-stat-value" id="totalKeywords">—</div>
+                        <div class="hero-stat-label">کلیدواژه تحت رصد</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">📊</div>
+                        <div class="hero-stat-value" id="totalContent">—</div>
+                        <div class="hero-stat-label">محتوای تحلیل‌شده</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">⏱️</div>
+                        <div class="hero-stat-value" id="lastUpdate">—</div>
+                        <div class="hero-stat-label">آخرین به‌روزرسانی</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-wrapper">
+                <div class="search-box">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" class="search-input" id="searchInput" placeholder="جستجو در گزارش‌ها، کلیدواژه‌ها و هشتگ‌ها...">
+                    <button class="search-btn" onclick="performSearch()">جستجو</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        <span class="icon">📂</span>
+                        <span>دسته‌بندی موضوعی</span>
+                    </h2>
+                    <p class="section-subtitle">گزارش‌ها بر اساس حوزه موضوعی</p>
+                </div>
+            </div>
+            <div class="categories-grid" id="categoriesGrid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>در حال بارگذاری...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Reports -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        <span class="icon">⭐</span>
+                        <span>گزارش‌های ویژه</span>
+                    </h2>
+                    <p class="section-subtitle">مهم‌ترین گزارش‌های منتشرشده</p>
+                </div>
+            </div>
+            <div class="featured-grid" id="featuredGrid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>در حال بارگذاری گزارش‌ها...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© ۱۴۰۵ سامانه هوشمند رصد و تحلیل رسانه — تمامی حقوق محفوظ است.</p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">آخرین به‌روزرسانی: <span id="footerUpdate">—</span></p>
+        </div>
+    </footer>
+
+    <script>
+        // بارگذاری گزارش‌ها از فایل JSON
+        async function loadReports() {
+            try {
+                const response = await fetch('reports.json');
+                const data = await response.json();
+                
+                updateStats(data);
+                renderCategories(data.reports);
+                renderFeaturedReports(data.reports);
+                
+            } catch (error) {
+                console.error('خطا در بارگذاری گزارش‌ها:', error);
+                showEmptyState();
+            }
+        }
+
+        // به‌روزرسانی آمار
+        function updateStats(data) {
+            const reports = data.reports;
+            
+            // تعداد گزارش‌ها
+            document.getElementById('totalReports').textContent = toPersianNumber(reports.length);
+            
+            // تعداد کلیدواژه‌های منحصر به فرد
+            const allKeywords = new Set();
+            reports.forEach(r => r.keywords.forEach(k => allKeywords.add(k)));
+            document.getElementById('totalKeywords').textContent = toPersianNumber(allKeywords.size);
+            
+            // مجموع محتوای تحلیل‌شده
+            const totalContent = reports.reduce((sum, r) => sum + (r.total_content || 0), 0);
+            document.getElementById('totalContent').textContent = formatNumber(totalContent);
+            
+            // آخرین به‌روزرسانی
+            const lastDate = reports.length > 0 ? reports[0].date : '—';
+            document.getElementById('lastUpdate').textContent = lastDate;
+            document.getElementById('footerUpdate').textContent = lastDate;
+        }
+
+        // رندر دسته‌بندی‌ها
+        function renderCategories(reports) {
+            const categories = {};
+            
+            reports.forEach(report => {
+                const cat = report.category;
+                if (!categories[cat]) {
+                    categories[cat] = {
+                        icon: report.category_icon,
+                        count: 0
+                    };
+                }
+                categories[cat].count++;
+            });
+            
+            const grid = document.getElementById('categoriesGrid');
+            
+            if (Object.keys(categories).length === 0) {
+                grid.innerHTML = '<div class="empty-state"><p>هنوز دسته‌بندی موجود نیست</p></div>';
+                return;
+            }
+            
+            grid.innerHTML = Object.entries(categories).map(([name, data]) => `
+                <div class="category-card" data-category="${name}">
+                    <div class="category-icon">${data.icon}</div>
+                    <div class="category-name">${name}</div>
+                    <div class="category-count">${toPersianNumber(data.count)} گزارش</div>
+                </div>
+            `).join('');
+            
+            // اضافه کردن کلیک برای فیلتر
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const category = card.dataset.category;
+                    filterByCategory(category);
+                });
+            });
+        }
+
+        // رندر گزارش‌های ویژه
+        function renderFeaturedReports(reports) {
+            const grid = document.getElementById('featuredGrid');
+            const featured = reports.filter(r => r.featured);
+            
+            if (featured.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-title">هنوز گزارشی منتشر نشده است</div>
+                        <div class="empty-state-text">
+                            اولین گزارش به زودی منتشر خواهد شد
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = featured.map(report => `
+                <div class="featured-card">
+                    <div class="featured-header">
+                        <div class="featured-category-badge">
+                            ${report.category_icon} ${report.category}
+                        </div>
+                        <div class="featured-date">${report.date}</div>
+                        <div class="featured-emoji">${report.category_icon}</div>
+                    </div>
+                    <div class="featured-body">
+                        <h3 class="featured-title">${report.title}</h3>
+                        <p class="featured-summary">${report.summary}</p>
+                        
+                        <div class="featured-keywords">
+                            ${report.keywords.slice(0, 3).map(k => 
+                                `<span class="keyword-tag">${k}</span>`
+                            ).join('')}
+                            ${report.keywords.length > 3 ? 
+                                `<span class="keyword-tag">+${toPersianNumber(report.keywords.length - 3)}</span>` : ''}
+                        </div>
+                        
+                        <div class="featured-footer">
+                            <div class="featured-platforms">
+                                ${getPlatformIcons(report.platforms)}
+                            </div>
+                            <a href="${report.file}" 
+                               class="view-report-btn"
+                               target="_blank"
+                               rel="noopener">
+                                مشاهده گزارش ←
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // فیلتر بر اساس دسته
+        function filterByCategory(category) {
+            const allReports = window.allReportsData || [];
+            const filtered = allReports.filter(r => r.category === category);
+            renderFeaturedReports(filtered);
+            
+            // اسکرول به بخش گزارش‌ها
+            document.getElementById('featuredGrid').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // جستجو
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const allReports = window.allReportsData || [];
+            
+            if (!query) {
+                renderFeaturedReports(allReports.filter(r => r.featured));
+                return;
+            }
+            
+            const filtered = allReports.filter(r => 
+                r.title.toLowerCase().includes(query) ||
+                r.summary.toLowerCase().includes(query) ||
+                r.keywords.some(k => k.toLowerCase().includes(query)) ||
+                r.hashtags.some(h => h.toLowerCase().includes(query))
+            );
+            
+            renderFeaturedReports(filtered);
+        }
+
+        // تبدیل نام پلتفرم به آیکون
+        function getPlatformIcons(platforms) {
+            const icons = {
+                'Instagram': '📸',
+                'X': '🐦
+                'Telegram': '💬',
+                'YouTube': '📺',
+                'TikTok': '🎵',
+                'News': '📰'
+            };
+            
+            return platforms.slice(0, 4).map(p => 
+                `<span class="platform-badge">${icons[p] || '📱'}</span>`
+            ).join('');
+        }
+
+        // تبدیل اعداد به فارسی
+        function toPersianNumber(num) {
+            const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            return num.toString().replace(/\d/g, d => persianDigits[d]);
+        }
+
+        // فرمت اعداد بزرگ
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return toPersianNumber((num / 1000000).toFixed(1)) + 'M';
+            } else if (num >= 1000) {
+                return toPersianNumber((num / 1000).toFixed(1)) + 'K';
+            }
+            return toPersianNumber(num);
+        }
+
+        // حالت خالی
+        function showEmptyState() {
+            document.getElementById('featuredGrid').innerHTML = `
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <div class="empty-state-icon">⚠️</div>
+                    <div class="empty-state-title">خطا در بارگذاری</div>
+                    <div class="empty-state-text">
+                        لطفاً اتصال اینترنت خود را بررسی کنید
+                    </div>
+                </div>
+            `;
+        }
+
+        // اجرا هنگام بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadReports();
+            
+            // ذخیره داده‌ها برای جستجو و فیلتر
+            const response = await fetch('reports.json');
+            const data = await response.json();
+            window.allReportsData = data.reports;
+        });
+
+        // جستجو با Enter
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
+</body>
+</html>
