@@ -786,230 +786,320 @@
         </div>
     </footer>
 
-    <script>
-        // بارگذاری گزارش‌ها از فایل JSON
-        async function loadReports() {
-            try {
-                const response = await fetch('reports.json');
-                const data = await response.json();
-                
-                updateStats(data);
-                renderCategories(data.reports);
-                renderFeaturedReports(data.reports);
-                
-            } catch (error) {
-                console.error('خطا در بارگذاری گزارش‌ها:', error);
-                showEmptyState();
+   <script>
+    // متغیر سراسری برای ذخیره گزارش‌ها
+    let allReportsData = [];
+
+    // بارگذاری گزارش‌ها از فایل JSON
+    async function loadReports() {
+        try {
+            const response = await fetch('reports.json?t=' + Date.now());
+            const data = await response.json();
+            allReportsData = data.reports;
+            updateStats(data);
+            renderCategories(data.reports);
+            renderFeaturedReports(data.reports.filter(r => r.featured));
+        } catch (error) {
+            console.error('خطا در بارگذاری گزارش‌ها:', error);
+            showEmptyState();
+        }
+    }
+
+    // به‌روزرسانی آمار
+    function updateStats(data) {
+        const reports = data.reports;
+        document.getElementById('totalReports').textContent = toPersianNumber(reports.length);
+        
+        const allKeywords = new Set();
+        reports.forEach(r => r.keywords.forEach(k => allKeywords.add(k)));
+        document.getElementById('totalKeywords').textContent = toPersianNumber(allKeywords.size);
+        
+        const totalContent = reports.reduce((sum, r) => sum + (r.total_content || 0), 0);
+        document.getElementById('totalContent').textContent = formatNumber(totalContent);
+        
+        const lastDate = reports.length > 0 ? reports[0].date : '—';
+        document.getElementById('lastUpdate').textContent = lastDate;
+        document.getElementById('footerUpdate').textContent = lastDate;
+    }
+
+    // رندر دسته‌بندی‌ها
+    function renderCategories(reports) {
+        const categories = {};
+        reports.forEach(report => {
+            const cat = report.category;
+            if (!categories[cat]) {
+                categories[cat] = { icon: report.category_icon, count: 0 };
             }
+            categories[cat].count++;
+        });
+        
+        const grid = document.getElementById('categoriesGrid');
+        
+        if (Object.keys(categories).length === 0) {
+            grid.innerHTML = '<div class="empty-state"><p>هنوز دسته‌بندی موجود نیست</p></div>';
+            return;
         }
-
-        // به‌روزرسانی آمار
-        function updateStats(data) {
-            const reports = data.reports;
-            
-            // تعداد گزارش‌ها
-            document.getElementById('totalReports').textContent = toPersianNumber(reports.length);
-            
-            // تعداد کلیدواژه‌های منحصر به فرد
-            const allKeywords = new Set();
-            reports.forEach(r => r.keywords.forEach(k => allKeywords.add(k)));
-            document.getElementById('totalKeywords').textContent = toPersianNumber(allKeywords.size);
-            
-            // مجموع محتوای تحلیل‌شده
-            const totalContent = reports.reduce((sum, r) => sum + (r.total_content || 0), 0);
-            document.getElementById('totalContent').textContent = formatNumber(totalContent);
-            
-            // آخرین به‌روزرسانی
-            const lastDate = reports.length > 0 ? reports[0].date : '—';
-            document.getElementById('lastUpdate').textContent = lastDate;
-            document.getElementById('footerUpdate').textContent = lastDate;
-        }
-
-        // رندر دسته‌بندی‌ها
-        function renderCategories(reports) {
-            const categories = {};
-            
-            reports.forEach(report => {
-                const cat = report.category;
-                if (!categories[cat]) {
-                    categories[cat] = {
-                        icon: report.category_icon,
-                        count: 0
-                    };
-                }
-                categories[cat].count++;
+        
+        grid.innerHTML = Object.entries(categories).map(([name, data]) => `
+            <div class="category-card" data-category="${name}">
+                <div class="category-icon">${data.icon}</div>
+                <div class="category-name">${name}</div>
+                <div class="category-count">${toPersianNumber(data.count)} گزارش</div>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', () => {
+                filterByCategory(card.dataset.category);
             });
-            
-            const grid = document.getElementById('categoriesGrid');
-            
-            if (Object.keys(categories).length === 0) {
-                grid.innerHTML = '<div class="empty-state"><p>هنوز دسته‌بندی موجود نیست</p></div>';
-                return;
-            }
-            
-            grid.innerHTML = Object.entries(categories).map(([name, data]) => `
-                <div class="category-card" data-category="${name}">
-                    <div class="category-icon">${data.icon}</div>
-                    <div class="category-name">${name}</div>
-                    <div class="category-count">${toPersianNumber(data.count)} گزارش</div>
-                </div>
-            `).join('');
-            
-            // اضافه کردن کلیک برای فیلتر
-            document.querySelectorAll('.category-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const category = card.dataset.category;
-                    filterByCategory(category);
-                });
-            });
-        }
+        });
+    }
 
-        // رندر گزارش‌های ویژه
-        function renderFeaturedReports(reports) {
-            const grid = document.getElementById('featuredGrid');
-            const featured = reports.filter(r => r.featured);
-            
-            if (featured.length === 0) {
+    // رندر گزارش‌های ویژه
+    function renderFeaturedReports(reports, isSearch = false, query = '') {
+        const grid = document.getElementById('featuredGrid');
+        
+        if (reports.length === 0) {
+            if (isSearch) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">🔍</div>
+                        <div class="empty-state-title">نتیجه‌ای یافت نشد</div>
+                        <div class="empty-state-text">
+                            هیچ گزارشی برای «<strong style="color: var(--accent-blue);">${escapeHtml(query)}</strong>» پیدا نشد.<br>
+                            لطفاً کلیدواژه دیگری را امتحان کنید.
+                        </div>
+                        <button onclick="clearSearch()" style="
+                            margin-top: 20px;
+                            background: var(--gradient-primary);
+                            color: white;
+                            border: none;
+                            padding: 10px 24px;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            font-family: inherit;
+                            font-size: 0.9rem;
+                            font-weight: 600;
+                        ">پاک کردن جستجو ✕</button>
+                    </div>`;
+            } else {
                 grid.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
                         <div class="empty-state-icon">📭</div>
                         <div class="empty-state-title">هنوز گزارشی منتشر نشده است</div>
-                        <div class="empty-state-text">
-                            اولین گزارش به زودی منتشر خواهد شد
-                        </div>
-                    </div>
-                `;
-                return;
+                        <div class="empty-state-text">اولین گزارش به زودی منتشر خواهد شد</div>
+                    </div>`;
             }
-            
-            grid.innerHTML = featured.map(report => `
-                <div class="featured-card">
-                    <div class="featured-header">
-                        <div class="featured-category-badge">
-                            ${report.category_icon} ${report.category}
-                        </div>
-                        <div class="featured-date">${report.date}</div>
-                        <div class="featured-emoji">${report.category_icon}</div>
+            return;
+        }
+        
+        // نمایش تعداد نتایج در حالت جستجو
+        let searchInfo = '';
+        if (isSearch) {
+            searchInfo = `
+                <div style="
+                    grid-column: 1 / -1;
+                    background: rgba(59, 130, 246, 0.1);
+                    border: 1px solid rgba(59, 130, 246, 0.3);
+                    padding: 12px 20px;
+                    border-radius: 12px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 10px;
+                ">
+                    <span style="color: var(--accent-blue-light);">
+                        🔍 ${toPersianNumber(reports.length)} نتیجه برای 
+                        «<strong>${escapeHtml(query)}</strong>»
+                    </span>
+                    <button onclick="clearSearch()" style="
+                        background: transparent;
+                        border: 1px solid var(--accent-blue);
+                        color: var(--accent-blue-light);
+                        padding: 4px 12px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-family: inherit;
+                        font-size: 0.8rem;
+                    ">پاک کردن ✕</button>
+                </div>`;
+        }
+        
+        grid.innerHTML = searchInfo + reports.map(report => `
+            <div class="featured-card">
+                <div class="featured-header">
+                    <div class="featured-category-badge">${report.category_icon} ${report.category}</div>
+                    <div class="featured-date">${report.date}</div>
+                    <div class="featured-emoji">${report.category_icon}</div>
+                </div>
+                <div class="featured-body">
+                    <h3 class="featured-title">${highlightText(report.title, query)}</h3>
+                    <p class="featured-summary">${highlightText(report.summary, query)}</p>
+                    <div class="featured-keywords">
+                        ${report.keywords.slice(0, 3).map(k => 
+                            `<span class="keyword-tag">${highlightText(k, query)}</span>`
+                        ).join('')}
+                        ${report.keywords.length > 3 ? 
+                            `<span class="keyword-tag">+${toPersianNumber(report.keywords.length - 3)}</span>` : ''}
                     </div>
-                    <div class="featured-body">
-                        <h3 class="featured-title">${report.title}</h3>
-                        <p class="featured-summary">${report.summary}</p>
-                        
-                        <div class="featured-keywords">
-                            ${report.keywords.slice(0, 3).map(k => 
-                                `<span class="keyword-tag">${k}</span>`
-                            ).join('')}
-                            ${report.keywords.length > 3 ? 
-                                `<span class="keyword-tag">+${toPersianNumber(report.keywords.length - 3)}</span>` : ''}
-                        </div>
-                        
-                        <div class="featured-footer">
-                            <div class="featured-platforms">
-                                ${getPlatformIcons(report.platforms)}
-                            </div>
-                            <a href="${report.file}" 
-                               class="view-report-btn"
-                               target="_blank"
-                               rel="noopener">
-                                مشاهده گزارش ←
-                            </a>
-                        </div>
+                    <div class="featured-footer">
+                        <div class="featured-platforms">${getPlatformIcons(report.platforms)}</div>
+                        <a href="${report.file}" class="view-report-btn" target="_blank" rel="noopener">
+                            مشاهده گزارش ←
+                        </a>
                     </div>
                 </div>
-            `).join('');
-        }
+            </div>
+        `).join('');
+    }
 
-        // فیلتر بر اساس دسته
-        function filterByCategory(category) {
-            const allReports = window.allReportsData || [];
-            const filtered = allReports.filter(r => r.category === category);
-            renderFeaturedReports(filtered);
-            
-            // اسکرول به بخش گزارش‌ها
-            document.getElementById('featuredGrid').scrollIntoView({ behavior: 'smooth' });
-        }
+    // هایلایت کلیدواژه جستجو در متن
+    function highlightText(text, query) {
+        if (!query || !text) return text;
+        const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedQuery})`, 'gi');
+        return text.replace(regex, '<mark style="background: rgba(245, 158, 11, 0.4); color: inherit; padding: 0 2px; border-radius: 3px;">$1</mark>');
+    }
 
-        // جستجو
-        function performSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const allReports = window.allReportsData || [];
-            
-            if (!query) {
-                renderFeaturedReports(allReports.filter(r => r.featured));
-                return;
-            }
-            
-            const filtered = allReports.filter(r => 
-                r.title.toLowerCase().includes(query) ||
-                r.summary.toLowerCase().includes(query) ||
-                r.keywords.some(k => k.toLowerCase().includes(query)) ||
-                r.hashtags.some(h => h.toLowerCase().includes(query))
-            );
-            
-            renderFeaturedReports(filtered);
-        }
+    // escape کردن HTML برای جلوگیری از XSS
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
-        // تبدیل نام پلتفرم به آیکون
-        function getPlatformIcons(platforms) {
-            const icons = {
-                'Instagram': '📸',
-                'X': '🐦',
-                'Telegram': '💬',
-                'YouTube': '📺',
-                'TikTok': '🎵',
-                'News': '📰'
-            };
-            
-            return platforms.slice(0, 4).map(p => 
-                `<span class="platform-badge">${icons[p] || '📱'}</span>`
-            ).join('');
-        }
+    // فیلتر بر اساس دسته
+    function filterByCategory(category) {
+        const filtered = allReportsData.filter(r => r.category === category);
+        renderFeaturedReports(filtered, true, category);
+        document.getElementById('featuredGrid').scrollIntoView({ behavior: 'smooth' });
+    }
 
-        // تبدیل اعداد به فارسی
-        function toPersianNumber(num) {
-            const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-            return num.toString().replace(/\d/g, d => persianDigits[d]);
+    // جستجوی اصلی
+    function performSearch() {
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        
+        // نمایش/مخفی کردن دکمه پاک کردن
+        const clearBtn = document.getElementById('clearSearchBtn');
+        if (clearBtn) {
+            clearBtn.style.display = query ? 'flex' : 'none';
         }
-
-        // فرمت اعداد بزرگ
-        function formatNumber(num) {
-            if (num >= 1000000) {
-                return toPersianNumber((num / 1000000).toFixed(1)) + 'M';
-            } else if (num >= 1000) {
-                return toPersianNumber((num / 1000).toFixed(1)) + 'K';
-            }
-            return toPersianNumber(num);
+        
+        if (!query) {
+            renderFeaturedReports(allReportsData.filter(r => r.featured));
+            return;
         }
+        
+        const filtered = allReportsData.filter(r => 
+            (r.title && r.title.toLowerCase().includes(query)) ||
+            (r.summary && r.summary.toLowerCase().includes(query)) ||
+            (r.category && r.category.toLowerCase().includes(query)) ||
+            (r.keywords && r.keywords.some(k => k.toLowerCase().includes(query))) ||
+            (r.hashtags && r.hashtags.some(h => h.toLowerCase().includes(query)))
+        );
+        
+        renderFeaturedReports(filtered, true, query);
+        
+        // اسکرول به نتایج
+        setTimeout(() => {
+            document.getElementById('featuredGrid').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }, 100);
+    }
 
-        // حالت خالی
-        function showEmptyState() {
-            document.getElementById('featuredGrid').innerHTML = `
-                <div class="empty-state" style="grid-column: 1 / -1;">
-                    <div class="empty-state-icon">⚠️</div>
-                    <div class="empty-state-title">خطا در بارگذاری</div>
-                    <div class="empty-state-text">
-                        لطفاً اتصال اینترنت خود را بررسی کنید
-                    </div>
+    // پاک کردن جستجو
+    function clearSearch() {
+        const searchInput = document.getElementById('searchInput');
+        searchInput.value = '';
+        const clearBtn = document.getElementById('clearSearchBtn');
+        if (clearBtn) clearBtn.style.display = 'none';
+        renderFeaturedReports(allReportsData.filter(r => r.featured));
+        searchInput.focus();
+    }
+
+    // تبدیل نام پلتفرم به آیکون
+    function getPlatformIcons(platforms) {
+        const icons = {
+            'Instagram': '📸',
+            'X': '🐦',
+            'Telegram': '💬',
+            'YouTube': '📺',
+            'TikTok': '🎵',
+            'News': '📰'
+        };
+        return platforms.slice(0, 4).map(p => 
+            `<span class="platform-badge">${icons[p] || '📱'}</span>`
+        ).join('');
+    }
+
+    // تبدیل اعداد به فارسی
+    function toPersianNumber(num) {
+        const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+        return num.toString().replace(/\d/g, d => persianDigits[d]);
+    }
+
+    // فرمت اعداد بزرگ
+    function formatNumber(num) {
+        if (num >= 1000000) return toPersianNumber((num / 1000000).toFixed(1)) + 'M';
+        if (num >= 1000) return toPersianNumber((num / 1000).toFixed(1)) + 'K';
+        return toPersianNumber(num);
+    }
+
+    // حالت خطا
+    function showEmptyState() {
+        document.getElementById('featuredGrid').innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <div class="empty-state-icon">⚠️</div>
+                <div class="empty-state-title">خطا در بارگذاری</div>
+                <div class="empty-state-text">
+                    لطفاً اتصال اینترنت خود را بررسی کنید یا صفحه را Refresh کنید.
+                    <br><br>
+                    <button onclick="location.reload()" style="
+                        background: var(--gradient-primary);
+                        color: white;
+                        border: none;
+                        padding: 10px 24px;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        font-family: inherit;
+                    ">🔄 تلاش مجدد</button>
                 </div>
-            `;
-        }
+            </div>`;
+    }
 
-        // اجرا هنگام بارگذاری صفحه
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadReports();
-            
-            // ذخیره داده‌ها برای جستجو و فیلتر
-            const response = await fetch('reports.json');
-            const data = await response.json();
-            window.allReportsData = data.reports;
+    // اجرا هنگام بارگذاری صفحه
+    document.addEventListener('DOMContentLoaded', loadReports);
+
+    // راه‌اندازی جستجو
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+        
+        // جستجوی real-time (با هر تایپ)
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch();
+            }, 300); // 300ms debounce
         });
-
+        
         // جستجو با Enter
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                e.preventDefault();
                 performSearch();
             }
         });
-    </script>
+        
+        // پاک کردن با Escape
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                clearSearch();
+            }
+        });
+    });
+</script>
 </body>
 </html>
