@@ -727,11 +727,21 @@
     <section class="search-section">
         <div class="container">
             <div class="search-wrapper">
-                <div class="search-box">
-                    <div class="search-icon">🔍</div>
-                    <input type="text" class="search-input" id="searchInput" placeholder="جستجو در گزارش‌ها، کلیدواژه‌ها و هشتگ‌ها...">
-                    <button class="search-btn" onclick="performSearch()">جستجو</button>
-                </div>
+ <div class="search-box" style="position: relative;">
+    <div class="search-icon">🔍</div>
+    <input type="text" class="search-input" id="searchInput" placeholder="جستجو در گزارش‌ها، کلیدواژه‌ها و هشتگ‌ها...">
+    <button id="clearSearchBtn" onclick="clearSearch()" style="
+        display: none;
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0 8px;
+        align-items: center;
+    " title="پاک کردن جستجو">✕</button>
+    <button class="search-btn" onclick="performSearch()">جستجو</button>
+</div>
             </div>
         </div>
     </section>
