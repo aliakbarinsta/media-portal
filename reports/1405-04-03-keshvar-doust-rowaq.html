@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>گزارش رصد رسانه‌ای — تعطیلی رواق کشوردوست</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #131829;
+            --bg-card: #1a2038;
+            --bg-card-hover: #232a47;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --border-color: #2a3152;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+        body.light-theme {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #e2e8f0;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #cbd5e1;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            padding: 20px;
+            padding-top: 90px;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .toolbar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .toolbar-brand { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--accent-cyan); }
+        .toolbar-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .toolbar-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .toolbar-btn:hover {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        .toolbar-btn.primary {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: transparent;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #db2777 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '🕌';
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 6rem;
+            opacity: 0.15;
+        }
+        .header h1 { font-size: 1.9rem; margin-bottom: 10px; color: white; }
+        .header .subtitle { font-size: 1.1rem; opacity: 0.9; margin-bottom: 15px; color: white; }
+        .header .meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.85rem; opacity: 0.9; }
+        .header .meta span {
+            background: rgba(255,255,255,0.15);
+            padding: 5px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            margin: 40px 0 20px;
+            padding: 15px 20px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border-right: 4px solid var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title .icon { font-size: 1.6rem; }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+        .card:hover { background: var(--bg-card-hover); transform: translateY(-4px); }
+        .card .card-label { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 10px; }
+        .card .card-value { font-size: 2rem; font-weight: bold; }
+        .card .card-change {
+            font-size: 0.85rem;
+            margin-top: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .card .card-change.up { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+        .card .card-change.down { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+        .card .card-change.neutral { background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); }
+        .summary-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .summary-section h3 { color: var(--accent-cyan); margin-bottom: 15px; font-size: 1.15rem; }
+        .summary-section p { color: var(--text-secondary); margin-bottom: 10px; text-align: justify; }
+        .trend-list { list-style: none; margin-bottom: 30px; }
+        .trend-list li {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .trend-list li:hover { background: var(--bg-card-hover); border-color: var(--accent-blue); }
+        .trend-list li .rank {
+            background: var(--gradient-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+        .trend-list li .trend-text { flex: 1; font-size: 0.95rem; }
+        .trend-list li .trend-freq {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        .sentiment-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-right: 8px;
+        }
+        .sentiment-pos { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .sentiment-neg { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+        .sentiment-neu { background: rgba(148, 163, 184, 0.2); color: var(--text-secondary); }
+        .sentiment-pol { background: rgba(245, 158, 11, 0.2); color: var(--accent-yellow); }
+        .hashtags-container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+        .hashtag {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: white;
+        }
+        .hashtag.alt { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); }
+        .hashtag.alt2 { background: linear-gradient(135deg, var(--accent-red), var(--accent-yellow)); }
+        .viral-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .viral-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .viral-card:hover { transform: translateY(-4px); border-color: var(--accent-blue); }
+        .viral-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+        }
+        .viral-card.high::before { background: var(--accent-red); }
+        .viral-card.medium::before { background: var(--accent-yellow); }
+        .viral-card.low::before { background: var(--accent-green); }
+        .viral-card .platform-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .viral-card .viral-rank {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--gradient-primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .viral-card .viral-title { font-size: 1rem; margin-bottom: 10px; font-weight: 600; }
+        .viral-card .viral-desc { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 12px; }
+        .viral-card .viral-stats { display: flex; gap: 15px; color: var(--text-secondary); font-size: 0.8rem; flex-wrap: wrap; }
+        .sentiment-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+        .sentiment-bar {
+            display: flex;
+            height: 50px;
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .sentiment-bar div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .sentiment-bar .positive { background: linear-gradient(90deg, #059669, #10b981); }
+        .sentiment-bar .negative { background: linear-gradient(90deg, #dc2626, #ef4444); }
+        .sentiment-bar .neutral { background: linear-gradient(90deg, #64748b, #94a3b8); }
+        .sentiment-legend { display: flex; gap: 30px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .sentiment-legend span { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 50%; }
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: var(--bg-secondary); }
+        th {
+            padding: 16px;
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+            font-weight: 600;
+        }
+        td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); font-size: 0.88rem; }
+        tr:hover { background: var(--bg-card-hover); }
+        .importance-high { color: var(--accent-red); font-weight: bold; }
+        .importance-medium { color: var(--accent-yellow); font-weight: bold; }
+        .importance-low { color: var(--accent-green); font-weight: bold; }
+        .platform-icon {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+        .platform-sentiment-table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        .platform-sentiment-table th { background: var(--bg-secondary); padding: 12px; color: var(--accent-cyan); }
+        .platform-sentiment-table td { padding: 12px; text-align: center; }
+        .alert-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            border: 1px solid var(--accent-yellow);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .alert-box h4 { color: var(--accent-yellow); margin-bottom: 10px; }
+        .alert-box ul { list-style: none; padding: 0; }
+        .alert-box ul li { padding: 5px 0; color: var(--text-secondary); }
+        .alert-box ul li::before { content: '⚡ '; color: var(--accent-yellow); }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--accent-green);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+            font-weight: 500;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        @media (max-width: 768px) {
+            .header { padding: 25px; }
+            .header h1 { font-size: 1.3rem; }
+            .cards-grid { grid-template-columns: 1fr 1fr; }
+            .viral-grid { grid-template-columns: 1fr; }
+            .header::before { display: none; }
+            .toolbar { flex-direction: column; gap: 10px; }
+            .toolbar-actions { width: 100%; justify-content: center; }
+            body { padding-top: 140px; }
+        }
+        @media print {
+            @page { size: A4; margin: 15mm; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { padding: 0; }
+            .toolbar, .toast { display: none !important; }
+            .header {
+                background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #db2777 100%) !important;
+                page-break-inside: avoid;
+            }
+            .card, .summary-section, .sentiment-section, .alert-box, .viral-card { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <div class="toolbar-brand">
+            <span>📊</span>
+            <span>سیستم رصد رسانه‌ای</span>
+        </div>
+        <div class="toolbar-actions">
+            <button class="toolbar-btn primary" onclick="handlePrint()">
+                <span>🖨️</span>
+                <span>چاپ / ذخیره PDF</span>
+            </button>
+            <button class="toolbar-btn" onclick="toggleTheme()" id="themeBtn">
+                <span id="themeIcon">☀️</span>
+                <span id="themeText">حالت روشن</span>
+            </button>
+            <button class="toolbar-btn" onclick="copyJSON()">
+                <span>📋</span>
+                <span>کپی JSON</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>📊 گزارش روزانه رصد رسانه‌های اجتماعی</h1>
+            <div class="subtitle">🕌 تعطیلی رواق کشوردوست و اعتراضات در حرم امام رضا (ع)</div>
+            <div class="meta">
+                <span>🔑 تحصن، کشوردوست، کفن پوش مشهدی</span>
+                <span>🌍 فارسی / ایران (مشهد)</span>
+                <span>📅 ۳ تیر ۱۴۰۵ | ۲۴ ژوئن ۲۰۲۶</span>
+                <span>⏰ بازه: ۳ روز گذشته</span>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span class="icon">📋</span>
+            <span>خلاصه مدیریتی</span>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">کل محتوای رصدشده</div>
+                <div class="card-value">~۱۵,۰۰۰</div>
+                <div class="card-change up">▲ ۳۲۰٪ نسبت به ۳ روز قبل</div>
+            </div>
+            <div class="card">
+                <div class="card-label">پلتفرم برتر</div>
+                <div class="card-value">Telegram / X</div>
+                <div class="card-change neutral">بیشترین حجم محتوا</div>
+            </div>
+            <div class="card">
+                <div class="card-label">احساس غالب</div>
+                <div class="card-value">🔴 منفی ۷۰٪</div>
+                <div class="card-change down">▲ ۲۸۰٪ رشد منفی</div>
+            </div>
+            <div class="card">
+                <div class="card-label">سطح ریسک</div>
+                <div class="card-value">🔴 بالا</div>
+                <div class="card-change down">حساسیت مذهبی عمیق</div>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h3>📝 تحلیل وضعیت کلی</h3>
+            <p>
+                فضای رسانه‌ای ۳ روز گذشته تحت تأثیر <strong>خبر تعطیلی رواق کشوردوست</strong> در حرم مطهر امام رضا (ع) و <strong>اعتراضات گسترده زائران و مجاوران</strong> قرار داشته است. این رویداد که با <strong>تحصن برخی از معترضان</strong> و حضور <strong>کفن‌پوشان مشهدی</strong> همراه بوده، بازتاب گسترده‌ای در شبکه‌های اجتماعی و رسانه‌های خبری داشته است.
+            </p>
+            <p>
+                ویدیوهای منتشرشده از تحصن و حضور کفن‌پوشان در حرم، به‌شدت وایرال شده‌اند. موضوع <strong>ابعاد مذهبی و عاطفی</strong> این رویداد باعث شده احساسات منفی بر فضای رسانه‌ای غالب باشد و شکاف عمیقی میان روایت رسمی و روایت معترضان ایجاد شود.
+            </p>
+        </div>
+
+        <div class="alert-box">
+            <h4>⚠️ ریسک‌ها و بحران‌های احتمالی</h4>
+            <ul>
+                <li><strong>حساسیت مذهبی عمیق</strong>: رواق کشوردوست یکی از رواق‌های مورد توجه زائران است</li>
+                <li><strong>گسترش اعتراضات</strong>: احتمال پیوستن گروه‌های دیگر به تحصن</li>
+                <li><strong>بازتاب رسانه‌ای منفی</strong>: انتشار ویدیوهای برخورد با معترضان</li>
+                <li><strong>شایعات و اخبار نادرست</strong>: انتشار اطلاعات نادرست درباره دلایل تعطیلی</li>
+            </ul>
+        </div>
+
+        <div class="summary-section">
+            <h3>💡 فرصت‌های رسانه‌ای</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 8px 0; color: var(--text-secondary);">✅ <strong>شفافیت در اطلاع‌رسانی</strong>: انتشار دلایل رسمی تعطیلی و برنامه بازگشایی</li>
+                <li style="padding: 8px 0; color: var(--text-secondary);">✅ <strong>گفتگو با معترضان</strong>: ایجاد کانال‌های ارتباطی با زائران و مجاوران</li>
+                <li style="padding: 8px 0; color: var(--text-secondary);">✅ <strong>تأکید بر حفظ حرمت حرم</strong>: تأکید بر اینکه تصمیمات با هدف حفظ حرمت حرم گرفته شده</li>
+                <li style="padding: 8px 0; color: var(--text-secondary);">✅ <strong>پوشش مثبت فعالیت‌های آستان قدس</strong>: برجسته‌سازی خدمات آستان قدس رضوی</li>
+            </ul>
+        </div>
+
+        <div class="section-title">
+            <span class="icon">📈</span>
+            <span>تحلیل ترندها</span>
+        </div>
+
+        <h3 style="margin-bottom: 15px; color: var(--accent-cyan);">🔥 ۵ روایت پرتکرار</h3>
+        <ul class="trend-list">
+            <li>
+                <span class="rank">۱</span>
+                <span class="trend-text">
+                    تعطیلی رواق کشوردوست و واکنش زائران — انتشار ویدیوهای اعتراض
+                    <span class="sentiment-badge sentiment-neg">🔴 منفی/خشمگین</span>
+                </span>
+                <span class="trend-freq">🔴 بسیار بالا</span>
+            </li>
+            <li>
+                <span class="rank">۲</span>
+                <span class="trend-text">
+                    تحصن معترضان در حرم — حضور کفن‌پوشان مشهدی
+                    <span class="sentiment-badge sentiment-neg">🔴 منفی/احساسی</span>
+                </span>
+                <span class="trend-freq">🔴 بسیار بالا</span>
+            </li>
+            <li>
+                <span class="rank">۳</span>
+                <span class="trend-text">
+                    دلایل تعطیلی رواق — اختلاف روایت‌ها بین مسئولان و معترضان
+                    <span class="sentiment-badge sentiment-pol">🟡 قطبی/تحلیلی</span>
+                </span>
+                <span class="trend-freq">🟡 بالا</span>
+            </li>
+            <li>
+                <span class="rank">۴</span>
+                <span class="trend-text">
+                    واکنش‌های روحانیت و علما — بیانیه‌ها و مواضع علما
+                    <span class="sentiment-badge sentiment-neg">🔴 منفی/نگران</span>
+                </span>
+                <span class="trend-freq">🟡 بالا</span>
+            </li>
+            <li>
+                <span class="rank">۵</span>
+                <span class="trend-text">
+                    برخورد نیروهای امنیتی — ویدیوهای برخورد با معترضان
+                    <span class="sentiment-badge sentiment-neg">🔴 منفی/انتقادی</span>
+                </span>
+                <span class="trend-freq">🟡 بالا</span>
+            </li>
+        </ul>
+
+        <h3 style="margin-bottom: 15px; color: var(--accent-cyan);"># هشتگ‌های پرتکرار</h3>
+        <div class="hashtags-container">
+            <span class="hashtag">#رواق_کشوردوست</span>
+            <span class="hashtag">#حرم_امام_رضا</span>
+            <span class="hashtag">#تحصن</span>
+            <span class="hashtag">#کفن_پوشان</span>
+            <span class="hashtag alt">#مشهد</span>
+            <span class="hashtag alt">#آستان_قدس</span>
+            <span class="hashtag alt2">#تعطیلی_رواق</span>
+            <span class="hashtag alt2">#اعتراض</span>
+            <span class="hashtag">#حرمت_حرم</span>
+            <span class="hashtag">#خراسان_رضوی</span>
+        </div>
+
+        <div class="section-title">
+            <span class="icon">🔥</span>
+            <span>محتوای وایرال برتر</span>
+        </div>
+
+        <div class="viral-grid">
+            <div class="viral-card high">
+                <span class="viral-rank">۱</span>
+                <span class="platform-badge">💬 Telegram</span>
+                <div class="viral-title">ویدیوی تحصن کفن‌پوشان مشهدی در رواق کشوردوست</div>
+                <p class="viral-desc">ویدیوی وایرال از حضور کفن‌پوشان در رواق و تحصن اعتراضی — بازتاب گسترده در کانال‌های خبری</p>
+                <div class="viral-stats">
+                    <span>👁️ ۲.۸M</span>
+                    <span>🔄 ۱۸۰K</span>
+                </div>
+            </div>
+            <div class="viral-card high">
+                <span class="viral-rank">۲</span>
+                <span class="platform-badge">🐦 X / Twitter</span>
+                <div class="viral-title">ویدیوی برخورد نیروهای امنیتی با معترضان</div>
+                <p class="viral-desc">ویدیوی منتشرشده از برخورد با معترضان در حرم — انتقادات گسترده در شبکه‌های اجتماعی</p>
+                <div class="viral-stats">
+                    <span>❤️ ۴۵۰K</span>
+                    <span>🔄 ۱۲۰K</span>
+                    <span>💬 ۶۵K</span>
+                </div>
+            </div>
+            <div class="viral-card high">
+                <span class="viral-rank">۳</span>
+                <span class="platform-badge">📸 Instagram</span>
+                <div class="viral-title">پست خبری درباره تعطیلی رواق کشوردوست</div>
+                <p class="viral-desc">پست صفحه خبری با توضیح دلایل تعطیلی و واکنش‌ها — کامنت‌های گسترده کاربران</p>
+                <div class="viral-stats">
+                    <span>❤️ ۲۸۰K</span>
+                    <span>💬 ۴۵K</span>
+                    <span>🔄 ۸۵K</span>
+                </div>
+            </div>
+            <div class="viral-card medium">
+                <span class="viral-rank">۴</span>
+                <span class="platform-badge">💬 Telegram</span>
+                <div class="viral-title">بیانیه روحانیون مشهدی در اعتراض به تعطیلی</div>
+                <p class="viral-desc">انتشار بیانیه جمعی از روحانیون مشهدی در انتقاد از تعطیلی رواق</p>
+                <div class="viral-stats">
+                    <span>👁️ ۱.۵M</span>
+                    <span>🔄 ۹۵K</span>
+                </div>
+            </div>
+            <div class="viral-card medium">
+                <span class="viral-rank">۵</span>
+                <span class="platform-badge">🐦 X / Twitter</span>
+                <div class="viral-title">ویدیوی سخنرانی یکی از معترضان در حرم</div>
+                <p class="viral-desc">ویدیوی وایرال از سخنرانی یکی از معترضان درباره اهمیت رواق کشوردوست</p>
+                <div class="viral-stats">
+                    <span>❤️ ۳۲۰K</span>
+                    <span>🔄 ۷۸K</span>
+                    <span>💬 ۵۲K</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span class="icon">😊</span>
+            <span>تحلیل احساسات</span>
+        </div>
+
+        <div class="sentiment-section">
+            <h3 style="color: var(--accent-cyan); margin-bottom: 15px;">نمودار کلی احساسات</h3>
+            <div class="sentiment-bar">
+                <div class="positive" style="width: 12%;">🟢 ۱۲٪</div>
+                <div class="neutral" style="width: 18%;">⚪ ۱۸٪</div>
+                <div class="negative" style="width: 70%;">🔴 ۷۰٪</div>
+            </div>
+            <div class="sentiment-legend">
+                <span><span class="legend-dot" style="background: var(--accent-green);"></span> مثبت (~۱,۸۰۰)</span>
+                <span><span class="legend-dot" style="background: var(--text-secondary);"></span> خنثی (~۲,۷۰۰)</span>
+                <span><span class="legend-dot" style="background: var(--accent-red);"></span> منفی (~۱۰,۵۰۰)</span>
+            </div>
+
+            <br>
+            <h3 style="color: var(--accent-cyan); margin: 25px 0 15px;">📊 توزیع احساسات به تفکیک پلتفرم</h3>
+            <table class="platform-sentiment-table">
+                <thead>
+                    <tr>
+                        <th>پلتفرم</th>
+                        <th>🟢 مثبت</th>
+                        <th>⚪ خنثی</th>
+                        <th>🔴 منفی</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>X / Twitter</strong></td>
+                        <td style="color: var(--accent-green);">۸٪</td>
+                        <td>۱۵٪</td>
+                        <td style="color: var(--accent-red);">۷۷٪</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Instagram</strong></td>
+                        <td style="color: var(--accent-green);">۱۵٪</td>
+                        <td>۲۰٪</td>
+                        <td style="color: var(--accent-red);">۶۵٪</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Telegram</strong></td>
+                        <td style="color: var(--accent-green);">۱۰٪</td>
+                        <td>۱۸٪</td>
+                        <td style="color: var(--accent-red);">۷۲٪</td>
+                    </tr>
+                    <tr>
+                        <td><strong>رسانه‌های داخلی</strong></td>
+                        <td style="color: var(--accent-green);">۲۵٪</td>
+                        <td>۳۵٪</td>
+                        <td style="color: var(--accent-red);">۴۰٪</td>
+                    </tr>
+                    <tr>
+                        <td><strong>رسانه‌های فارسی خارج</strong></td>
+                        <td style="color: var(--accent-green);">۵٪</td>
+                        <td>۱۰٪</td>
+                        <td style="color: var(--accent-red);">۸۵٪</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>📊 این گزارش توسط <strong style="color: var(--accent-blue);">سیستم رصد و تحلیل رسانه‌های اجتماعی</strong> تولید شده است.</p>
+            <p>📅 تاریخ تولید: ۳ تیر ۱۴۰۵ | ⏰ بازه زمانی: ۳ روز گذشته</p>
+            <p>🕌 موضوع: تعطیلی رواق کشوردوست و اعتراضات در حرم امام رضا (ع)</p>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast">✅ کپی شد!</div>
+
+    <script>
+        function handlePrint() {
+            const confirmed = confirm(
+                '🖨️ راهنمای ذخیره PDF:\n\n' +
+                '• در پنجره پرینت، گزینه Destination را روی «Save as PDF» قرار دهید\n' +
+                '• گزینه «Background graphics» را فعال کنید تا رنگ‌ها حفظ شوند\n\n' +
+                'آیا مایل به ادامه هستید؟'
+            );
+            if (confirmed) window.print();
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            body.classList.toggle('light-theme');
+            if (body.classList.contains('light-theme')) {
+                icon.textContent = '🌙';
+                text.textContent = 'حالت تیره';
+            } else {
+                icon.textContent = '☀️';
+                text.textContent = 'حالت روشن';
+            }
+        }
+
+        function copyJSON() {
+            const reportData = {
+                report_metadata: {
+                    event_name: "تعطیلی رواق کشوردوست و اعتراضات در حرم امام رضا (ع)",
+                    keywords: ["تحصن", "کشوردوست", "تعطیلی رواق کشوردوست", "کفن پوش مشهدی"],
+                    language_region: "فارسی / ایران (مشهد)",
+                    report_date: "1405/04/03",
+                    period: "3 روز گذشته"
+                },
+                summary: {
+                    total_posts: "~۱۵,۰۰۰",
+                    change_pct: "۳۲۰",
+                    top_platform: "Telegram / X",
+                    dominant_sentiment: "منفی ۷۰٪",
+                    risk_level: "بالا"
+                },
+                sentiment: {
+                    positive_pct: "۱۲",
+                    neutral_pct: "۱۸",
+                    negative_pct: "۷۰"
+                }
+            };
+            navigator.clipboard.writeText(JSON.stringify(reportData, null, 2))
+                .then(() => showToast('✅ داده‌های JSON کپی شد!'))
+                .catch(() => showToast('❌ خطا در کپی'));
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+    </script>
+</body>
+</html>
